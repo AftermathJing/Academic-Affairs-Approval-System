@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    namespace:名称空间
+-->
+
+<mapper namespace="com.aftermath.mapper.ApprovalMapper">
+
+    <!-- 定义 <resultMap> 映射 -->
+    <resultMap id="ApprovalResultMap" type="com.aftermath.pojo.Approval">
+        <id column="student_id" property="studentId"/>
+        <id column="course_id" property="courseId"/>
+        <result column="student_name" property="studentName"/>
+        <result column="course_name" property="courseName"/>
+        <result column="Credits" property="credits"/>
+        <result column="Semester" property="semester"/>
+        <result column="Begin_year" property="beginYear"/>
+        <result column="course_notes" property="courseNotes"/>
+        <result column="Status" property="status"/>
+        <result column="choose_notes" property="chooseNotes"/>
+    </resultMap>
+
+    <select id="selectAllApproval" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE s.ID = #{studentId}
+          AND (ch.Status = FALSE OR ch.Status IS NULL); -- 指定学号，查询status不为True的记录
+    </select>
+
+    <select id="selectStatusNull" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE ch.Status IS NULL; -- 查询status为NULL的记录
+    </select>
+
+    <select id="selectStatusTrue" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE ch.Status = TRUE; -- 查询status为True的记录
+    </select>
+
+    <select id="selectByCourseName" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE c.Name = #{courseName}; -- 查询status为True的记录
+    </select>
+
+    <select id="selectByStudentName" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE s.Name = #{studentName}; -- 查询status为True的记录
+    </select>
+
+    <select id="selectByCourseNameStudentId" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE c.Name = #{courseName}
+          AND s.ID = #{studentId}; -- 查询status为True的记录
+    </select>
+
+    <select id="selectStatusFalse" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE ch.Status = FALSE; -- 查询status为False的记录
+    </select>
+
+    <select id="selectAll" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+    </select>
+
+    <select id="selectAllApproving" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE s.ID = #{studentId}
+          AND ch.Status IS NULL; -- 指定学号，查询status为null的记录
+    </select>
+
+    <select id="selectAllReject" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Student s
+                 JOIN Choose ch ON s.ID = ch.Student_ID -- 连接Student和Choose表
+                 JOIN Course c ON ch.Course_ID = c.ID -- 连接Choose和Course表
+        WHERE s.ID = #{studentId}
+          AND ch.Status = FALSE; -- 指定学号，查询status为null的记录
+    </select>
+
+    <select id="selectApprovingByInstructorId" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Instructor i
+                 JOIN Teach t ON i.ID = t.Instructor_ID -- 连接Instructor和Teach表
+                 JOIN Course c ON t.Course_ID = c.ID -- 连接Teach和Course表
+                 LEFT JOIN Choose ch ON t.Course_ID = ch.Course_ID -- 左连接Choose表
+                 LEFT JOIN Student s ON ch.Student_ID = s.ID -- 左连接Student表
+        WHERE i.ID = #{instructorId}
+          AND ch.Status IS NULL; -- 指定职工号，查询status为null的记录
+    </select>
+
+    <select id="selectByStudentNameInstructorId" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Instructor i
+                 JOIN Teach t ON i.ID = t.Instructor_ID -- 连接Instructor和Teach表
+                 JOIN Course c ON t.Course_ID = c.ID -- 连接Teach和Course表
+                 LEFT JOIN Choose ch ON t.Course_ID = ch.Course_ID -- 左连接Choose表
+                 LEFT JOIN Student s ON ch.Student_ID = s.ID -- 左连接Student表
+        WHERE i.ID = #{instructorId}
+          AND s.Name = #{studentName};
+    </select>
+
+    <select id="selectByCourseNameInstructorId" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Instructor i
+                 JOIN Teach t ON i.ID = t.Instructor_ID -- 连接Instructor和Teach表
+                 JOIN Course c ON t.Course_ID = c.ID -- 连接Teach和Course表
+                 LEFT JOIN Choose ch ON t.Course_ID = ch.Course_ID -- 左连接Choose表
+                 LEFT JOIN Student s ON ch.Student_ID = s.ID -- 左连接Student表
+        WHERE i.ID = #{instructorId}
+          AND c.Name = #{courseName}; -- 指定职工号，查询status为null的记录
+    </select>
+
+    <select id="selectApprovalByInstructorId" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Instructor i
+                 JOIN Teach t ON i.ID = t.Instructor_ID -- 连接Instructor和Teach表
+                 JOIN Course c ON t.Course_ID = c.ID -- 连接Teach和Course表
+                 LEFT JOIN Choose ch ON t.Course_ID = ch.Course_ID -- 左连接Choose表
+                 LEFT JOIN Student s ON ch.Student_ID = s.ID -- 左连接Student表
+        WHERE i.ID = #{instructorId}
+          AND ch.Status IS NOT NULL; -- 指定职工号，查询status不为null的记录
+    </select>
+
+    <select id="selectRejectByInstructorId" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Instructor i
+                 JOIN Teach t ON i.ID = t.Instructor_ID -- 连接Instructor和Teach表
+                 JOIN Course c ON t.Course_ID = c.ID -- 连接Teach和Course表
+                 LEFT JOIN Choose ch ON t.Course_ID = ch.Course_ID -- 左连接Choose表
+                 LEFT JOIN Student s ON ch.Student_ID = s.ID -- 左连接Student表
+        WHERE i.ID = #{instructorId}
+          AND ch.Status = FALSE; -- 指定职工号，查询status为FALSEl的记录
+    </select>
+
+    <select id="selectAgreeByInstructorId" resultMap="ApprovalResultMap">
+        SELECT s.ID         AS student_id,
+               s.Name       AS student_name,
+               c.ID         AS course_id,
+               c.Name       AS course_name,
+               c.Credits    AS credits,
+               c.Semester   AS semester,
+               c.Begin_year AS begin_year,
+               c.Notes      AS course_notes,
+               ch.Status    AS status,
+               ch.Notes     As choose_notes
+        FROM Instructor i
+                 JOIN Teach t ON i.ID = t.Instructor_ID -- 连接Instructor和Teach表
+                 JOIN Course c ON t.Course_ID = c.ID -- 连接Teach和Course表
+                 LEFT JOIN Choose ch ON t.Course_ID = ch.Course_ID -- 左连接Choose表
+                 LEFT JOIN Student s ON ch.Student_ID = s.ID -- 左连接Student表
+        WHERE i.ID = #{instructorId}
+          AND ch.Status = TRUE; -- 指定职工号，查询status为TRUE的记录
+    </select>
+
+</mapper>

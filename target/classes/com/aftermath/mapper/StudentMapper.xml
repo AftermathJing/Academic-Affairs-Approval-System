@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    namespace:名称空间
+-->
+
+<mapper namespace="com.aftermath.mapper.StudentMapper">
+
+    <select id="selectAll" resultType="student">
+        select *
+        from Student;
+    </select>
+
+    <select id="selectById" resultType="student">
+        select *
+        from Student
+        where ID = #{id};
+    </select>
+
+    <select id="selectByIdPassword" resultType="Student">
+        select *
+        from Student
+        where ID = #{id}
+          and Password = #{password};
+    </select>
+
+    <delete id="deleteById">
+        delete
+        from Student
+        where ID = #{id};
+    </delete>
+</mapper>

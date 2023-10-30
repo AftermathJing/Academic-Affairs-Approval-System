@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    namespace:名称空间
+-->
+
+<mapper namespace="com.aftermath.mapper.FlowMapper">
+
+    <!-- 定义 <resultMap> 映射 -->
+    <resultMap id="FlowResultMap" type="com.aftermath.pojo.Flow">
+        <id column="course_id" property="courseId"/>
+        <result column="course_name" property="courseName"/>
+        <result column="supervisor_instructor" property="supervisorInstructor"/>
+        <result column="teacher_instructor" property="teacherInstructor"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="FlowResultMap">
+        SELECT c.ID                    AS course_id,
+               c.Name                  AS course_name,
+               f.Supervisor_Instructor AS supervisor_instructor,
+               f.Instructor            AS teacher_instructor
+        FROM Flow f
+                 left join Course C on C.ID = f.Course_ID
+    </select>
+
+    <select id="selectByCourseName" resultMap="FlowResultMap">
+        SELECT c.ID                    AS course_id,
+               c.Name                  AS course_name,
+               f.Supervisor_Instructor AS supervisor_instructor,
+               f.Instructor            AS teacher_instructor
+        FROM Flow f
+                 left join Course C on C.ID = f.Course_ID
+        WHERE c.Name = #{courseName}
+    </select>
+
+    <select id="selectByCourseId" resultMap="FlowResultMap">
+        SELECT c.ID                    AS course_id,
+               c.Name                  AS course_name,
+               f.Supervisor_Instructor AS supervisor_instructor,
+               f.Instructor            AS teacher_instructor
+        FROM Flow f
+                 left join Course C on C.ID = f.Course_ID
+        WHERE c.ID = #{courseId}
+    </select>
+
+    <insert id="addFlow">
+        INSERT INTO Flow(Course_ID, Supervisor_Instructor, Instructor)
+        VALUES (#{courseId}, #{supervisorInstructor}, #{teacherInstructor})
+    </insert>
+
+    <delete id="deleteByCourseId">
+        DELETE
+        FROM Flow
+        WHERE Course_ID = #{courseId}
+    </delete>
+</mapper>

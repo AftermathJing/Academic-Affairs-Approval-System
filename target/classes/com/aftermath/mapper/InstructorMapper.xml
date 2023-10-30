@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    namespace:名称空间
+-->
+
+<mapper namespace="com.aftermath.mapper.InstructorMapper">
+    <!-- 定义 <resultMap> 映射 -->
+    <resultMap id="InstructorResultMap" type="com.aftermath.pojo.Instructor">
+        <id column="instructor_id" property="id"/>
+        <result column="instructor_name" property="name"/>
+        <result column="instructor_password" property="password"/>
+        <result column="instructor_notes" property="notes"/>
+    </resultMap>
+
+    <select id="selectAll" resultType="instructor">
+        select *
+        from Instructor;
+    </select>
+
+    <select id="selectById" resultType="instructor">
+        select *
+        from Instructor
+        where ID = #{id};
+    </select>
+
+    <update id="modifyNotes">
+        update Instructor
+        set Instructor.Notes = #{authority}
+        where ID = #{id};
+    </update>
+
+    <select id="queryNotes" resultType="string">
+        select Notes
+        from Instructor
+        where ID = #{id};
+    </select>
+
+    <select id="selectByName" resultType="instructor">
+        select *
+        from Instructor
+        where Name = #{instructorName};
+    </select>
+
+    <select id="selectSupervisorInstructor" resultMap="InstructorResultMap">
+        SELECT Instructor.id AS instructor_id,
+               Instructor.name AS instructor_name,
+               Instructor.password AS instructor_password,
+               Instructor.notes AS instructor_notes
+        FROM Instructor
+                 JOIN Teach ON Instructor.ID = Teach.Instructor_ID
+                 JOIN Course ON Course.ID = Teach.Course_ID
+        WHERE Course.Name = #{courseName}
+          AND Instructor.notes = '主管教师'
+    </select>
+
+    <select id="selectTeacherInstructor" resultMap="InstructorResultMap">
+        SELECT Instructor.id AS instructor_id,
+               Instructor.name AS instructor_name,
+               Instructor.password AS instructor_password,
+               Instructor.notes AS instructor_notes
+        FROM Instructor
+                 JOIN Teach ON Instructor.ID = Teach.Instructor_ID
+                 JOIN Course ON Course.ID = Teach.Course_ID
+        WHERE Course.Name = #{courseName}
+          AND Instructor.notes = '授课教师'
+    </select>
+
+    <select id="selectByIdPassword" resultType="instructor">
+        select *
+        from Instructor
+        where ID = #{id}
+          and Password = #{password};
+    </select>
+
+    <delete id="deleteById">
+        delete
+        from Instructor
+        where ID = #{id};
+    </delete>
+
+</mapper>

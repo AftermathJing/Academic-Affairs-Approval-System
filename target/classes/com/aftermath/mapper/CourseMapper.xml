@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    namespace:名称空间
+-->
+
+<mapper namespace="com.aftermath.mapper.CourseMapper">
+
+    <!-- 定义 <resultMap> 映射 -->
+    <resultMap id="CourseResultMap" type="com.aftermath.pojo.Course">
+        <id column="ID" property="id"/>
+        <result column="Name" property="name"/>
+        <result column="Credits" property="credits"/>
+        <result column="Semester" property="semester"/>
+        <result column="Begin_year" property="beginYear"/>
+        <result column="Notes" property="notes"/>
+    </resultMap>
+
+
+    <select id="selectAll" resultMap="CourseResultMap">
+        select *
+        from Course;
+    </select>
+
+    <select id="selectById" resultMap="CourseResultMap">
+        select *
+        from Course
+        where ID = #{courseId}
+    </select>
+
+    <select id="selectByName" resultMap="CourseResultMap">
+        select *
+        from Course
+        where Course.Name = #{courseName}
+    </select>
+
+    <select id="selectByStudentId" resultMap="CourseResultMap">
+        SELECT c.*
+        FROM Course c,
+             Choose ch
+        WHERE ch.Course_ID = c.ID
+          AND ch.Student_ID = #{studentId}
+    </select>
+
+    <select id="selectByInstructorId" resultMap="CourseResultMap">
+        SELECT c.*
+        FROM Course c,
+             Teach t
+        WHERE t.Course_ID = c.ID
+          AND t.Instructor_ID = #{instructorId}
+    </select>
+
+    <select id="selectAllChoose" resultMap="CourseResultMap">
+        SELECT c.*
+        FROM Course c
+                 INNER JOIN Choose ch
+                            ON c.ID = ch.Course_ID
+                                AND ch.Student_ID = #{studentId}
+                                AND ch.Status = TRUE;
+
+    </select>
+
+    <select id="selectAllNoChoose" resultMap="CourseResultMap">
+        SELECT c.*
+        FROM Course c
+        WHERE c.ID NOT IN (SELECT ch.Course_ID
+                           FROM Choose ch
+                           WHERE ch.Student_ID = #{studentId});
+    </select>
+
+    <select id="selectAllReject" resultMap="CourseResultMap">
+        SELECT c.*
+        FROM Course c
+                 INNER JOIN Choose ch
+                            ON c.ID = ch.Course_ID
+                                AND ch.Student_ID = #{studentId}
+                                AND ch.Status = FAlSE;
+    </select>
+
+    <select id="existChoose" resultType="integer">
+        SELECT count(*)
+        FROM Choose
+        WHERE Student_ID = #{studentId}
+          AND Course_ID = #{courseId}
+    </select>
+
+    <select id="selectStatus" resultType="boolean">
+        SELECT Choose.Status
+        FROM Choose
+        WHERE Student_ID = #{studentId}
+          AND Course_ID = #{courseId}
+    </select>
+
+    <insert id="insertChoose">
+        INSERT INTO Choose (Student_ID, Course_ID, Status, Notes)
+        VALUES (#{studentId, jdbcType=CHAR}, #{courseId, jdbcType=CHAR}, null, #{notes, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateChooseTrue">
+        UPDATE Choose
+        SET status = TRUE
+        WHERE Student_ID = #{studentId}
+          AND Course_ID = #{courseId}
+    </update>
+
+    <update id="updateChooseFalse">
+        UPDATE Choose
+        SET status = FALSE
+        WHERE Student_ID = #{studentId}
+          AND Course_ID = #{courseId}
+    </update>
+
+    <delete id="cancelChoose">
+        DELETE
+        FROM Choose
+        WHERE Student_ID = #{studentId}
+          AND Course_ID = #{courseId}
+          AND (Status IS NULL OR Status = FALSE);
+    </delete>
+
+    <delete id="deleteById">
+        DELETE
+        FROM Course
+        WHERE ID = #{courseId}
+    </delete>
+
+    <insert id="insertCourse">
+        INSERT INTO Course(ID, Name, Credits, Semester, Begin_year, Notes)
+        VALUES (#{courseId, jdbcType=CHAR},
+                #{courseName, jdbcType=CHAR},
+                #{credits},
+                #{semester, jdbcType=VARCHAR},
+                #{beginYear},
+                #{notes, jdbcType=VARCHAR})
+    </insert>
+</mapper>

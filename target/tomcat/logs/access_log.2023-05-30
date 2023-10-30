@@ -1,0 +1,10 @@
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:04:00 +0800] "GET /AcademicAffairsApprovalSystem HTTP/1.1" 302 - http-nio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:04:02 +0800] "GET /AcademicAffairsApprovalSystem/ HTTP/1.1" 500 2514 http-nio-8080-exec-2 942
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:07:20 +0800] "GET /AcademicAffairsApprovalSystem_war HTTP/1.1" 404 - http-nio-8080-exec-3 0
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:11:26 +0800] "GET /AcademicAffairsApprovalSystem HTTP/1.1" 302 - http-nio-8888-exec-1 0
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:11:27 +0800] "GET /AcademicAffairsApprovalSystem/ HTTP/1.1" 500 2434 http-nio-8888-exec-2 753
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:11:27 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-nio-8888-exec-3 0
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:14:28 +0800] "GET /AcademicAffairsApprovalSystem HTTP/1.1" 302 - http-nio-8888-exec-1 0
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:14:29 +0800] "GET /AcademicAffairsApprovalSystem/ HTTP/1.1" 500 2434 http-nio-8888-exec-2 689
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:17:15 +0800] "GET /AcademicAffairsApprovalSystem HTTP/1.1" 302 - http-nio-8888-exec-1 0
+0:0:0:0:0:0:0:1 - - [30/May/2023:09:17:16 +0800] "GET /AcademicAffairsApprovalSystem/ HTTP/1.1" 500 2434 http-nio-8888-exec-2 851

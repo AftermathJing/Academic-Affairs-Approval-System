@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    namespace:名称空间
+-->
+
+<mapper namespace="com.aftermath.mapper.AdminMapper">
+
+    <select id="selectAll" resultType="admin">
+        select *
+        from Admin;
+    </select>
+
+    <select id="selectById" resultType="admin">
+        select *
+        from Admin
+        where ID = #{id};
+    </select>
+
+    <select id="selectByIdPassword" resultType="admin">
+        select *
+        from Admin
+        where ID = #{id}
+          and Password = #{password};
+    </select>
+
+    <delete id="deleteById">
+        delete
+        from Admin
+        where ID = #{id};
+    </delete>
+</mapper>
